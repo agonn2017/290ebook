@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 必须是全局唯一 -->
+<mapper namespace="com.ebook.dao.EntryMapper">
+	
+	<insert id="addEntry">
+		INSERT INTO `entry` (`categoryid`, `title`, `summary`, `uploaduser`, `createdate`) 
+		VALUES (#{categoryid}, #{title}, #{summary}, #{uploaduser}, #{createdate});
+	</insert>
+	
+	<select id="findCategoryList" resultType="Category">
+		select * from category
+	</select>
+	
+	<select id="findEntryCount" resultType="int" parameterType="int">
+		select count(1) from entry
+		<where>
+			<if test="cid>0">categoryid=#{cid}</if>
+		</where>
+	</select>
+	
+	
+	<select id="findEntryPaging" resultType="Entry" parameterType="int">
+		select * from entry
+		<where>
+			<if test="cid>0">categoryid=#{cid}</if>
+		</where>
+		limit #{start},#{size}
+	</select>
+	
+	<delete id="delEntry">
+		delete from entry where id=#{cid}
+	</delete>
+	
+	<select id="findEntryId" parameterType="int" resultType="Entry">
+		select * from entry where id=#{cid}
+	</select>
+	
+	<update id="updEntry">
+		update entry
+		<set>
+			<if test="categoryid>0">categoryid=#{categoryid},</if>
+			<if test="title!=null and title!=''">title=#{title},</if>
+			<if test="summary!=null and summary!=''">summary=#{summary},</if>
+			<if test="uploaduser!=null and uploaduser!=''">uploaduser=#{uploaduser},</if>
+			<if test="createdate!=null and createdate!=''">createdate=#{createdate},</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	<select id="findEntryPagingVue" resultType="Entry" parameterType="int">
+		select * from entry
+		<where>
+			<if test="cid>0">categoryid=#{cid}</if>
+		</where>
+	</select>
+</mapper>
